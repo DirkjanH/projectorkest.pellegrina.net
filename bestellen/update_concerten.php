@@ -9,7 +9,7 @@ $_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php';
 
 require_once($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php');
 
-Kint::$enabled_mode = false; // ($_SERVER['REMOTE_ADDR'] === '83.87.12.163');
+Kint::$enabled_mode = true; // ($_SERVER['REMOTE_ADDR'] === '83.87.12.163');
 
 ob_start();
 session_start();
@@ -67,7 +67,6 @@ if ((isset($_POST["Wijzigen"])) && ($_POST["Wijzigen"] == "Wijzigen")) {
 	d($updateSQL);
 
 	exec_query($updateSQL);
-	// echo ('concert is gewijzigd');
 }
 
 if ((isset($_POST["Wissen"])) && ($_POST["Wissen"] == "Wissen")and(isset($_POST['concertId']))and($_POST['concertId'] != "")) {
@@ -75,10 +74,8 @@ if ((isset($_POST["Wissen"])) && ($_POST["Wissen"] == "Wissen")and(isset($_POST[
 		quote($_POST['concertId'], "int"));
 
 	exec_query($deleteSQL);
-	// echo ('concert is gewist');
 }
 
-// begin Recordset
 $concertId = "-1";
 if (isset($_GET['concertId'])) {
 	if (!isset($_POST["leegmaken"]))$concertId = $_GET['concertId'];
@@ -87,7 +84,6 @@ if (isset($_GET['concertId'])) {
 
 d($query_concert);
 d($concert);
-// end Recordset
 ?> 
 
 <!DOCTYPE HTML>
@@ -98,7 +94,7 @@ d($concert);
 	<meta charset="utf-8">
 	<link href="<?php echo $css; ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo $bestellijst_css; ?>" rel="stylesheet" type="text/css">
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
 	<script>
 		function w3_open() {
 			document.getElementById("main").style.marginLeft = "260px";
