@@ -1,6 +1,6 @@
 <?php
 // stel php in dat deze fouten weergeeft
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 require_once('modules/bestelfuncties.php');
@@ -9,7 +9,7 @@ $_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php';
 
 require_once($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php');
 
-Kint::$enabled_mode = true; // ($_SERVER['REMOTE_ADDR'] === '83.87.12.163');
+Kint::$enabled_mode = false; // ($_SERVER['REMOTE_ADDR'] === '83.87.12.163');
 
 ob_start();
 session_start();
