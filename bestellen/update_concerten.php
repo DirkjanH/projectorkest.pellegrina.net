@@ -3,10 +3,9 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-//require_once('modules/bestelfuncties.php');
+require_once('modules/bestelfuncties.php');
 
-//echo($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php').'</br>';
-echo('vendor/autoload.php').'</br>';
+$_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php';
 
 require_once($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php');
 
