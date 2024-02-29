@@ -138,7 +138,7 @@ d($concerten);
 									<?php } ?>
 							</ul>
 						</div>
-				<?php // } ?>
+				<?php } ?>
 		</form>
 	</div>
 
