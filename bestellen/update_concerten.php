@@ -3,9 +3,10 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
-require_once('modules/bestelfuncties.php');
+//require_once('modules/bestelfuncties.php');
 
-echo($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php').'</br>';
+//echo($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php').'</br>';
+echo('vendor/autoload.php').'</br>';
 
 require_once($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php');
 
@@ -123,27 +124,27 @@ d($concert);
 				<input name="zoek" type="submit" id="zoek" value="zoek">
 				<input name="wis" type="submit" id="wis" value="wis">
 				<?php  if (isset($concerten) AND is_array($concerten)) $aantal_concerten = count($concerten); else $aantal_concerten = 0;
-      if ($aantal_concerten > 0) { ?>
-				<p>
-					<?php echo ($aantal_concerten) ?> resultaten. Klik een item aan: </p>
-			</div>
-			<div id="navcontainer">
-				<ul id="navlist">
-					<li><a href="#" onclick="w3_close()" class="w3-closenav w3-large w3-hide-large">Close &times;</a>
-					</li>
-					<?	foreach($concerten AS $conc) {
-							$datum = strftime("%a %e %B %Y", strtotime($conc['datum'])); 
-							$c = $conc['concerttitel']; ?>
-							<li id="active">
-								<a href="<?php echo $_SERVER['PHP_SELF'].'?concertId='.$conc['concertId']; ?>">
-									<?php 
-							if (isset($conc)) echo "$c<br><span class='klein'>($datum)</span>"; ?>
-								</a>
-							</li>
-					<?php }?>
-				</ul>
-			</div>
-			<?php }?>
+				if ($aantal_concerten > 0) { ?>
+							<p>
+								<?php echo ($aantal_concerten) ?> resultaten. Klik een item aan: </p>
+						</div>
+						<div id="navcontainer">
+							<ul id="navlist">
+								<li><a href="#" onclick="w3_close()" class="w3-closenav w3-large w3-hide-large">Close &times;</a>
+								</li>
+								<?	foreach($concerten AS $conc) {
+										$datum = strftime("%a %e %B %Y", strtotime($conc['datum'])); 
+										$c = $conc['concerttitel']; ?>
+										<li id="active">
+											<a href="<?php echo $_SERVER['PHP_SELF'].'?concertId='.$conc['concertId']; ?>">
+												<?php 
+										if (isset($conc)) echo "$c<br><span class='klein'>($datum)</span>"; ?>
+											</a>
+										</li>
+									<?php } ?>
+							</ul>
+						</div>
+				<?php // } ?>
 		</form>
 	</div>
 
