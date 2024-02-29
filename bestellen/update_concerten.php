@@ -82,8 +82,7 @@ if (isset($_GET['concertId'])) {
 	$concert = select_query("SELECT * FROM {$tabel_concerten} WHERE concertId = {$concertId}", 1);
 }
 
-d($query_concert);
-d($concert);
+d($concerten);
 ?> 
 
 <!DOCTYPE HTML>
