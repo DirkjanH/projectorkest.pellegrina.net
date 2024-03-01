@@ -1,6 +1,6 @@
 <?php
 // stel php in dat deze fouten weergeeft
-ini_set('display_errors', 1);
+//ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 require_once('modules/bestelfuncties.php');
@@ -10,7 +10,7 @@ use function PHP81_BC\strftime;
 
 require_once($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php');
 
-Kint::$enabled_mode = true; // ($_SERVER['REMOTE_ADDR'] === '83.87.12.163');
+Kint::$enabled_mode = false; // ($_SERVER['REMOTE_ADDR'] === '83.87.12.163');
 
 ob_start();
 session_start();
@@ -136,11 +136,11 @@ d($concerten);
 							<a href="$href">$c<br><span class='klein'>($datum)</span></a></li>
 						XXX;
 					}
-?>
-</ul>
+					?>
+					</ul>
 				<?php } ?>	
-</div>
-</form>
+			</div>
+		</form>
 	</div>
 
 	<div id="main" class="w3-main w3-white w3-container w3-padding">
