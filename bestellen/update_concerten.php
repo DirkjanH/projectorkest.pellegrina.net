@@ -137,6 +137,7 @@ XXX;
 }
 ?>
 </ul>
+<?php } ?>
 </div>
 </form>
 	</div>
