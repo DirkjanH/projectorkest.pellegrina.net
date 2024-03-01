@@ -118,28 +118,27 @@ d($concerten);
 				<input name="zoek" type="submit" id="zoek" value="zoek">
 				<input name="wis" type="submit" id="wis" value="wis">
 				<?php  if (isset($concerten) AND is_array($concerten)) $aantal_concerten = count($concerten); else $aantal_concerten = 0;
-				if ($aantal_concerten > 0) { ?>
-							<p>
-								<?php echo ($aantal_concerten) ?> resultaten. Klik een item aan: </p>
-						</div>
-						<div id="navcontainer">
-							<ul id="navlist">
-								<li><a href="#" onclick="w3_close()" class="w3-closenav w3-large w3-hide-large">Close &times;</a>
-								</li>
-								<?	foreach($concerten AS $conc) {
-										$datum = strftime("%a %e %B %Y", strtotime($conc['datum'])); 
-										$c = $conc['concerttitel']; ?>
-										<li id="active">
-											<a href="<?php echo $_SERVER['PHP_SELF'].'?concertId='.$conc['concertId']; ?>">
-												<?php 
-										if (isset($conc)) echo "$c<br><span class='klein'>($datum)</span>"; ?>
-											</a>
-										</li>
-									<?php } ?>
-							</ul>
-						</div>
-				<?php } ?>
-		</form>
+				if ($aantal_concerten > 0) { 
+echo <<<XXX
+<p>$aantal_concerten resultaten. Klik een item aan:</p>
+</div>
+	<div id="navcontainer">
+		<ul id="navlist">
+			<li><a href="#" onclick="w3_close()" class="w3-closenav w3-large w3-hide-large">Close &times;</a></li>
+XXX;		
+foreach($concerten AS $conc) {
+	$datum = strftime("%a %e %B %Y", strtotime($conc['datum'])); 
+	$c = $conc['concerttitel'];
+	$href = $_SERVER['PHP_SELF'].'?concertId='.$conc['concertId'];
+echo <<<XXX
+<li id="active">
+	<a href="$href">$c<br><span class='klein'>($datum)</span></a></li>
+XXX;
+}
+?>
+</ul>
+</div>
+</form>
 	</div>
 
 	<div id="main" class="w3-main w3-white w3-container w3-padding">
