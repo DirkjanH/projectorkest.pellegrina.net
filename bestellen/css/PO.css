@@ -110,6 +110,9 @@ th {
 #res th {
   background: #00ff99;
 }
+#navcontainer {
+  width: 230px;
+}
 #navcontainer a {
   display: block;
   padding: 3px;
