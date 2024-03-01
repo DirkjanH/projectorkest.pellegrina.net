@@ -1,11 +1,12 @@
 <?php
 // stel php in dat deze fouten weergeeft
-//ini_set('display_errors', 1);
+ini_set('display_errors', 1);
 error_reporting(E_ALL);
 
 require_once('modules/bestelfuncties.php');
 
 $_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php';
+use function PHP81_BC\strftime;
 
 require_once($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php');
 
@@ -119,25 +120,25 @@ d($concerten);
 				<input name="wis" type="submit" id="wis" value="wis">
 				<?php  if (isset($concerten) AND is_array($concerten)) $aantal_concerten = count($concerten); else $aantal_concerten = 0;
 				if ($aantal_concerten > 0) { 
-echo <<<XXX
-<p>$aantal_concerten resultaten. Klik een item aan:</p>
-</div>
-	<div id="navcontainer">
-		<ul id="navlist">
-			<li><a href="#" onclick="w3_close()" class="w3-closenav w3-large w3-hide-large">Close &times;</a></li>
-XXX;		
-foreach($concerten AS $conc) {
-	$datum = strftime("%a %e %B %Y", strtotime($conc['datum'])); 
-	$c = $conc['concerttitel'];
-	$href = $_SERVER['PHP_SELF'].'?concertId='.$conc['concertId'];
-echo <<<XXX
-<li id="active">
-	<a href="$href">$c<br><span class='klein'>($datum)</span></a></li>
-XXX;
-}
+					echo <<<XXX
+					<p>$aantal_concerten resultaten. Klik een item aan:</p>
+					</div>
+						<div id="navcontainer">
+							<ul id="navlist">
+								<li><a href="#" onclick="w3_close()" class="w3-closenav w3-large w3-hide-large">Close &times;</a></li>
+					XXX;		
+					foreach($concerten AS $conc) {
+						$datum = strftime("%a %e %B %Y", strtotime($conc['datum'])); 
+						$c = $conc['concerttitel'];
+						$href = $_SERVER['PHP_SELF'].'?concertId='.$conc['concertId'];
+						echo <<<XXX
+						<li id="active">
+							<a href="$href">$c<br><span class='klein'>($datum)</span></a></li>
+						XXX;
+					}
 ?>
 </ul>
-<?php } ?>
+				<?php } ?>	
 </div>
 </form>
 	</div>
