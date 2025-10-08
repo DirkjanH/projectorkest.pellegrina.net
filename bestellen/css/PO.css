@@ -92,6 +92,10 @@ input[type="email"],
 textarea {
   background-color: papayawhip;
 }
+.cols2 {
+  column-count: 2;
+  column-fill: balance;
+}
 .cols3 {
   column-count: 3;
   column-fill: balance;
