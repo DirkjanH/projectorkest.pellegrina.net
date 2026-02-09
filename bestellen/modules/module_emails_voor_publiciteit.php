@@ -7,7 +7,7 @@ error_reporting(E_ALL);
 require_once($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php');
 
 Kint::$enabled_mode = false; //($_SERVER['REMOTE_ADDR'] === '83.85.191.103');
-Kint\Renderer\RichRenderer::$folder = false;
+
 require_once( 'bestelfuncties.php' );
 
 // begin Recordset
@@ -53,12 +53,6 @@ $aantal = count( $reserveringen );
 			}
 			?>
 		</table>
-		<p>&nbsp;</p>
-		<?php	foreach($reserveringen as $res) {?> "
-		<?php echo $res['email']; ?>";"
-		<?php echo $res['naam']; ?>";"
-		<?php echo $res['voornaam']; ?>"<br>
-		<?php } ?>
 	</div>
 </body>
 </html>
