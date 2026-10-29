@@ -149,6 +149,9 @@
                         target="_blank">Full orchestral score</a></li>
                 <li><a href="https://pellegrina.net/pdf/2026-1/Dvořák - Svatební košile - piano reduction.pdf"
                         target="_blank">Vocal score</a></li>
+                <li><a href="https://pellegrina.net/pdf/2026-1/Svatební košile met NL uitspraak.pdf"
+                        target="_blank">Vocal score with Dutch pronunciation</a>
+                </li>
                 <li><a href="https://midi.emjeka.nl/midifiles/dvorak-bruidshemd.html"
                         target="_blank">Practice files for all chorus voices</a>
                 </li>
