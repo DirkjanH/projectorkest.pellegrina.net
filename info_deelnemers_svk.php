@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
@@ -8,15 +7,14 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style type="text/css">
-        .cols3 {
-            column-count: 3;
-            column-rule: none;
-        }
+    .cols3 {
+        column-count: 3;
+        column-rule: none;
+    }
     </style>
     <title>Project Dvořák - Het Bruidshemd 2026 - informatie voor deelnemers
     </title>
 </head>
-
 <body>
     <div class="TekstpaginaAchtergrond">
         <header class="w3-container w3-text-white"
@@ -37,8 +35,7 @@
                 spetterden door de kathedraal en wisten het publiek mee te
                 slepen. Helaas konden we dit programma maar eenmaal opvoeren en
                 is de opname door een fout mislukt. De roep om het werk nog een
-                keer uit te voeren, maar dan in Nederland, werd hoorbaar.
-            </p>
+                keer uit te voeren, maar dan in Nederland, werd hoorbaar. </p>
             <p> Op zondagmiddag 28 februari 2026 voeren we dit prachtige werk
                 opnieuw uit in de Geertekerk te Utrecht. We hopen op een zo
                 groot mogelijke deelname van de deelnemers van afgelopen zomer.
@@ -142,54 +139,55 @@
                 reactie te ontvangen. </p>
             <h2 class="w3-center w3-brown">Dvořák - Svatební košile</h2>
             <p>Hier vind je de partituur en alle partijen voor Dvořáks cantate
-                <em>Svatební košile</em> (Het Bruidshemd), op. 69.
-            </p>
+                <em>Svatební košile</em> (Het Bruidshemd), op. 69. </p>
             <ul>
                 <li><a href="https://pellegrina.net/pdf/2026-1/Dvořák - Svatební košíle - score A4.pdf"
-                        target="_blank">Full orchestral score</a></li>
+                        target="_blank">Volledige orkestpartituur</a></li>
                 <li><a href="https://pellegrina.net/pdf/2026-1/Dvořák - Svatební košile - piano reduction.pdf"
-                        target="_blank">Vocal score</a></li>
+                        target="_blank">Klavieruittreksel</a></li>
                 <li><a href="https://pellegrina.net/pdf/2026-1/Svatební košile met NL uitspraak.pdf"
-                        target="_blank">Vocal score with Dutch pronunciation</a>
+                        target="_blank">Klavieruittreksel met Nederlandse
+                        uitspraak</a>
                 </li>
                 <li><a href="https://midi.emjeka.nl/midifiles/dvorak-bruidshemd.html"
-                        target="_blank">Practice files for all chorus voices</a>
+                        target="_blank">MIDI-oefenbestanden voor alle
+                        koorstemmen</a>
                 </li>
             </ul>
             <div class="cols3">
                 <ul>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Flauto 1.pdf"
-                            target="_blank">Flute I</a></li>
+                            target="_blank">Fluit I</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Flauto 2.pdf"
-                            target="_blank">Flute II</a></li>
+                            target="_blank">Fluit II</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Oboe 1.pdf"
-                            target="_blank">Oboe I</a></li>
+                            target="_blank">Hobo I</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Oboe 2.pdf"
-                            target="_blank">Oboe II</a></li>
+                            target="_blank">Hobo II</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Corno ingl..pdf"
-                            target="_blank">Cor anglais</a></li>
+                            target="_blank">Engelse hoorn</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Clarinetto 1.pdf"
-                            target="_blank">Clarinet I</a></li>
+                            target="_blank">Klarinet I</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Clarinetto 2.pdf"
-                            target="_blank">Clarinet II</a></li>
+                            target="_blank">Klarinet II</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Svatební košile - Bass clarinet - Bass Clarinet in Bb.pdf"
-                            target="_blank">Bass clarinet</a></li>
+                            target="_blank">Basklarinet</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Fagott 1.pdf"
-                            target="_blank">Bassoon I</a></li>
+                            target="_blank">Fagot I</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Fagott 2.pdf"
-                            target="_blank">Bassoon II</a></li>
+                            target="_blank">Fagot II</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Corno 1.pdf"
-                            target="_blank">Horn I</a></li>
+                            target="_blank">Hoorn I</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Corno 2.pdf"
-                            target="_blank">Horn II</a></li>
+                            target="_blank">Hoorn II</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Corno 3.pdf"
-                            target="_blank">Horn III</a></li>
+                            target="_blank">Hoorn III</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Corno 4.pdf"
-                            target="_blank">Horn IV</a></li>
+                            target="_blank">Hoorn IV</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Tromba 1.pdf"
-                            target="_blank">Trumpet I</a></li>
+                            target="_blank">Trompet I</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Tromba 2.pdf"
-                            target="_blank">Trumpet II</a></li>
+                            target="_blank">Trompet II</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Trombone 1.pdf"
                             target="_blank">Trombone I</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Trombone 2.pdf"
@@ -199,25 +197,24 @@
                     <li><a href="https://pellegrina.net/pdf/2026-1/Tuba.pdf"
                             target="_blank">Tuba</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Timpani.pdf"
-                            target="_blank">Timpani</a></li>
+                            target="_blank">Pauken</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Svatební košile - Triangle, Tam-tam, Orchestral Bells.pdf"
-                            target="_blank">Other percussion</a></li>
+                            target="_blank">Overig slagwerk</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/ARPA I.pdf"
                             target="_blank">Harp</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Violino I.pdf"
-                            target="_blank">Violin I</a></li>
+                            target="_blank">Viool I</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Violino II.pdf"
-                            target="_blank">Violin II</a></li>
+                            target="_blank">Viool II</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Viola.pdf"
-                            target="_blank">Viola</a></li>
+                            target="_blank">Altviool</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Violoncello.pdf"
                             target="_blank">Cello</a></li>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Contrabasso.pdf"
-                            target="_blank">Double bass</a></li>
+                            target="_blank">Contrabas</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </body>
-
 </html>
