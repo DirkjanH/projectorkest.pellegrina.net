@@ -8,9 +8,15 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style type="text/css">
-        .cols3 {
-            column-count: 3;
+        .cols2 {
+            column-count: 2;
             column-rule: none;
+        }
+
+        @media (max-width: 600px) {
+            .cols2 {
+                column-count: 1;
+            }
         }
     </style>
     <title>Project Dvořák - Het Bruidshemd 2026 - informatie voor deelnemers
@@ -162,7 +168,7 @@
                         Sklenčka</a></li>
                 </li>
             </ul>
-            <div class="cols3">
+            <div class="cols2">
                 <ul>
                     <li><a href="https://pellegrina.net/pdf/2026-1/Flauto 1.pdf"
                             target="_blank">Fluit I</a></li>
