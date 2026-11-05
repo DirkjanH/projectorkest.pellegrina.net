@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
@@ -7,14 +8,15 @@
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="icon" href="/favicon.ico" type="image/x-icon">
     <style type="text/css">
-    .cols3 {
-        column-count: 3;
-        column-rule: none;
-    }
+        .cols3 {
+            column-count: 3;
+            column-rule: none;
+        }
     </style>
     <title>Project Dvořák - Het Bruidshemd 2026 - informatie voor deelnemers
     </title>
 </head>
+
 <body>
     <div class="TekstpaginaAchtergrond">
         <header class="w3-container w3-text-white"
@@ -35,7 +37,8 @@
                 spetterden door de kathedraal en wisten het publiek mee te
                 slepen. Helaas konden we dit programma maar eenmaal opvoeren en
                 is de opname door een fout mislukt. De roep om het werk nog een
-                keer uit te voeren, maar dan in Nederland, werd hoorbaar. </p>
+                keer uit te voeren, maar dan in Nederland, werd hoorbaar.
+            </p>
             <p> Op zondagmiddag 28 februari 2026 voeren we dit prachtige werk
                 opnieuw uit in de Geertekerk te Utrecht. We hopen op een zo
                 groot mogelijke deelname van de deelnemers van afgelopen zomer.
@@ -139,7 +142,8 @@
                 reactie te ontvangen. </p>
             <h2 class="w3-center w3-brown">Dvořák - Svatební košile</h2>
             <p>Hier vind je de partituur en alle partijen voor Dvořáks cantate
-                <em>Svatební košile</em> (Het Bruidshemd), op. 69. </p>
+                <em>Svatební košile</em> (Het Bruidshemd), op. 69.
+            </p>
             <ul>
                 <li><a href="https://pellegrina.net/pdf/2026-1/Dvořák - Svatební košíle - score A4.pdf"
                         target="_blank">Volledige orkestpartituur</a></li>
@@ -152,6 +156,10 @@
                 <li><a href="https://midi.emjeka.nl/midifiles/dvorak-bruidshemd.html"
                         target="_blank">MIDI-oefenbestanden voor alle
                         koorstemmen</a>
+                <li><a href="https://m.youtube.com/watch?v=PoFILLsE50A"
+                        target="_blank">De Tsjechische tekst gelezen (gespeeld)
+                        door een vooraanstaande Tsjechische acteur, Ota
+                        Sklenčka</a></li>
                 </li>
             </ul>
             <div class="cols3">
@@ -217,4 +225,5 @@
         </div>
     </div>
 </body>
+
 </html>
