@@ -1,24 +1,22 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="utf-8">
     <link href="bestellen/css/PO.css" rel="stylesheet" type="text/css">
     <title>Barokmuziek uit Centraal Europa - informatie voor deelnemers</title>
     <style>
-        .cols3 {
-            column-count: 3;
-        }
+    .cols3 {
+        column-count: 3;
+    }
 
-        @media (max-width: 700px) {
-            .cols3 {
-                column-count: 1;
-            }
+    @media (max-width: 700px) {
+        .cols3 {
+            column-count: 1;
         }
+    }
     </style>
 </head>
-
 <body>
     <div class="TekstpaginaAchtergrond">
         <header class="w3-container w3-text-white"
@@ -28,7 +26,7 @@
                         Pellegrina</a></i> zomercursus</h2>
             <h1>Barokmuziek uit Centraal Europa</h1>
             <p>zaterdagavond 16 januari • Aanvang 20:00 uur</p>
-            <p>Dorpskerk • Markt 1 • Beusichem</p>
+            <p>Grote of St. Barbarakerk • Culemborg</p>
         </header>
         <div class="w3-panel w3-white">
             <p>Alweer een tijdje terug heb ik sommige deelnemers van afgelopen
@@ -36,11 +34,10 @@
                 La Pellegrina barokcursus in Nieuw Sion met barokmuziek uit
                 Centraal Europa te herhalen. Daar werd enthousiast op
                 gereageerd. We kunnen nu het programma hernemen op
-                <strong>zaterdagavond 16 januari in de Dorpskerk in
-                    Beusichem</strong>. Femke werkt weer met het orkest en
+                <strong>zaterdagavond 16 januari in de Grote of St. Barbarakerk
+                    in Culemborg</strong>. Femke werkt weer met het orkest en
                 speelt mee als concertmeester. Dirkjan werkt met de solisten en
-                het koor en dirigeert het geheel.
-            </p>
+                het koor en dirigeert het geheel. </p>
             <p>We hopen natuurlijk dat je kunt en wilt meedoen. <strong>Meld je
                     in dat geval vandaag nog aan!</strong> Je kunt je opgeven
                 via <a href="https://forms.gle/KqTRvZPeJ3Vi6CpS7"
@@ -64,8 +61,9 @@
                 <li>vrijdag 15 januari, 14:00 - max. 21:00: repetitie in de
                     Oud-Katholieke Kerk Culemborg; eerst zangers met Dirkjan en
                     orkest met Femke, na de pauze gezamenlijk</li>
-                <li>zaterdag 16 januari: 16:00 generale repetitie en 20:00
-                    concert, beide in de Dorpskerk in Beusichem, Markt 1</li>
+                <li>zaterdag 16 januari: 17:00 generale repetitie en 20:00
+                    concert, beide in de Grote of St. Barbarakerk in Culemborg
+                </li>
             </ul>
             <p>De kosten voor deelname aan dit project bedragen € 95 p.p. De
                 deelnemersbijdrage hoeft pas betaald te worden na bevestiging
@@ -221,5 +219,4 @@
         </div>
     </div>
 </body>
-
 </html>
