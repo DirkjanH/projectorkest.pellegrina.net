@@ -107,8 +107,7 @@
                     </tr>
                     <tr>
                         <td>vrijdag 26 februari</td>
-                        <td> Johannes-Bernarduskerk Utrecht, <br> Oranje
-                            Nassaulaan 2, 3523 VR Utrecht </td>
+                        <td> Singelkerk, Wittevrouwensingel 28, 3581 GC Utrecht </td>
                         <td>19:30 - 22:00</td>
                         <td>koor apart o.l.v. Mitchell</td>
                         <td>orkest niet</td>
