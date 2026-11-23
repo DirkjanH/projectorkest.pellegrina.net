@@ -128,7 +128,7 @@
                 Karolína Janů en Martin Slavík, zijn ook weer van de partij. De
                 orkestrepetities en het geheel staan onder leiding van <a
                     href="https://www.horringa.net" target="_blank"> Dirkjan
-                    Horringa </a> . Petr, Martina en hun zoons en andere
+                    Horringa</a>. Petr, Martina en hun zoons en andere
                 Tsjechische Pellegrina-docenten komen weer over en spelen mee.
                 Ook komen er een zestal Tsjechische koorzangers uit Budějovice
                 over om te helpen, onder andere met de uitspraak. </p>
