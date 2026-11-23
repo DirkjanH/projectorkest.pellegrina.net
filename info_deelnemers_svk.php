@@ -51,10 +51,8 @@
                 Omdat waarschijnlijk niet iedereen kan meedoen, doen we ook een
                 beroep op Pellegrina-deelnemers van andere cursussen en jaren,
                 en op andere goede en belangstellende koorzangers en
-                instrumentalisten, met name strijkers. </p>
-            <p> Voor verdere en actuele informatie kun je ook terecht op <a
-                    href="https://projectorkest.pellegrina.net/info_deelnemers_svk.php">projectorkest.pellegrina.net</a>
-                . </p>
+                instrumentalisten, met name strijkers en trompetten. Zij kunnen
+                zich aanmelden via de onderstaande formulieren.</p>
             <div class="">
                 <h3>
                     <a href="https://forms.gle/X6WKu3MmtAmWEGyi8"
@@ -65,12 +63,6 @@
                         target="_blank"> Aanmeldformulier voor orkestleden </a>
                 </h3>
             </div>
-            <p> We ontvangen je reactie graag uiterlijk <strong>15
-                    oktober</strong> . Ook als je nog een voorbehoud hebt, horen
-                we graag of je wel of niet mee wilt doen. Je kunt dit ook mailen
-                naar <a
-                    href="mailto:dirkjan@pellegrina.net">dirkjan@pellegrina.net</a>
-                . </p>
             <hr>
             <h4>De repetities en het concert zijn als volgt gepland:</h4>
             <h2 class="w3-center w3-brown">Repetitieschema</h2>
@@ -138,8 +130,8 @@
                     href="https://www.horringa.net" target="_blank"> Dirkjan
                     Horringa </a> . Petr, Martina en hun zoons en andere
                 Tsjechische Pellegrina-docenten komen weer over en spelen mee.
-                Ook komen er enkele Tsjechische koorzangers uit Budějovice over
-                om te helpen met de uitspraak. </p>
+                Ook komen er een zestal Tsjechische koorzangers uit Budějovice
+                over om te helpen, onder andere met de uitspraak. </p>
             <p> De kosten voor deelname aan dit project bedragen &euro;&nbsp;100
                 p.p. De deelnemersbijdrage hoeft pas betaald te worden na
                 bevestiging van plaatsing. </p>
