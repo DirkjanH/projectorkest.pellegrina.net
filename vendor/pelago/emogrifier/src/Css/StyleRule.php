@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pelago\Emogrifier\Css;
 
+use Sabberworm\CSS\OutputFormat;
 use Sabberworm\CSS\Property\Selector;
 use Sabberworm\CSS\RuleSet\DeclarationBlock;
 
@@ -12,7 +13,7 @@ use Sabberworm\CSS\RuleSet\DeclarationBlock;
  *
  * @internal
  */
-class StyleRule
+final class StyleRule
 {
     /**
      * @var DeclarationBlock
@@ -25,7 +26,6 @@ class StyleRule
     private $containingAtRule;
 
     /**
-     * @param DeclarationBlock $declarationBlock
      * @param string $containingAtRule e.g. `@media screen and (max-width: 480px)`
      */
     public function __construct(DeclarationBlock $declarationBlock, string $containingAtRule = '')
@@ -35,26 +35,34 @@ class StyleRule
     }
 
     /**
-     * @return array<int, string> the selectors, e.g. `["h1", "p"]`
+     * @return list<non-empty-string> the selectors, e.g. `["h1", "p"]`
      */
     public function getSelectors(): array
     {
-        /** @var array<int, Selector> $selectors */
         $selectors = $this->declarationBlock->getSelectors();
         return \array_map(
             static function (Selector $selector): string {
-                return (string)$selector;
+                $renderedSelector = $selector->render(OutputFormat::createCompact());
+                \assert($renderedSelector !== '');
+                return $renderedSelector;
             },
-            $selectors
+            $selectors,
         );
     }
 
     /**
      * @return string the CSS declarations, separated and followed by a semicolon, e.g., `color: red; height: 4px;`
      */
-    public function getDeclarationAsText(): string
+    public function getDeclarationsAsText(): string
     {
-        return \implode(' ', $this->declarationBlock->getRules());
+        $declarations = $this->declarationBlock->getDeclarations();
+        $renderedDeclarations = [];
+        $outputFormat = OutputFormat::create();
+        foreach ($declarations as $declaration) {
+            $renderedDeclarations[] = $declaration->render($outputFormat);
+        }
+
+        return \implode(' ', $renderedDeclarations);
     }
 
     /**
@@ -62,11 +70,11 @@ class StyleRule
      */
     public function hasAtLeastOneDeclaration(): bool
     {
-        return $this->declarationBlock->getRules() !== [];
+        return $this->declarationBlock->getDeclarations() !== [];
     }
 
     /**
-     * @returns string e.g. `@media screen and (max-width: 480px)`, or an empty string
+     * @return string e.g. `@media screen and (max-width: 480px)`, or an empty string
      */
     public function getContainingAtRule(): string
     {

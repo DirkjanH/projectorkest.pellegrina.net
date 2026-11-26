@@ -8,6 +8,7 @@
   use IntlDateFormatter;
   use IntlGregorianCalendar;
   use InvalidArgumentException;
+  use Locale;
 
   /**
    * Locale-formatted strftime using IntlDateFormatter (PHP 8.1 compatible)
@@ -24,7 +25,9 @@
    *
    * @param  string $format Date format
    * @param  integer|string|DateTime $timestamp Timestamp
+   * @param  string|null $locale locale
    * @return string
+   * @throws InvalidArgumentException
    * @author BohwaZ <https://bohwaz.net/>
    */
   function strftime (string $format, $timestamp = null, ?string $locale = null) : string {
@@ -36,21 +39,16 @@
       } catch (Exception $e) {
         throw new InvalidArgumentException('$timestamp argument is neither a valid UNIX timestamp, a valid date-time string or a DateTime object.', 0, $e);
       }
+
+      $timestamp->setTimezone(new DateTimeZone(date_default_timezone_get()));
     }
 
-    $timestamp->setTimezone(new DateTimeZone(date_default_timezone_get()));
-
-    if (empty($locale)) {
-      // get current locale
-      $locale = setlocale(LC_TIME, '0');
-    }
-    // remove trailing part not supported by ext-intl locale
-    $locale = preg_replace('/[^\w-].*$/', '', $locale);
+    $locale = Locale::canonicalize($locale ?? (Locale::getDefault() ?? setlocale(LC_TIME, '0')));
 
     $intl_formats = [
-      '%a' => 'EEE',	// An abbreviated textual representation of the day	Sun through Sat
+      '%a' => 'ccc',	// An abbreviated textual representation of the day	Sun through Sat
       '%A' => 'EEEE',	// A full textual representation of the day	Sunday through Saturday
-      '%b' => 'MMM',	// Abbreviated month name, based on the locale	Jan through Dec
+      '%b' => 'LLL',	// Abbreviated month name, based on the locale	Jan through Dec
       '%B' => 'MMMM',	// Full month name, based on the locale	January through December
       '%h' => 'MMM',	// Abbreviated month name, based on the locale (an alias of %b)	Jan through Dec
     ];
@@ -95,7 +93,11 @@
       //  in formatted strings.
       // To adjust for this, a custom calendar can be supplied with a cutover date arbitrarily far in the past.
       $calendar = IntlGregorianCalendar::createInstance();
-      $calendar->setGregorianChange(PHP_INT_MIN);
+      // NOTE: IntlGregorianCalendar::createInstance DOES NOT return an IntlGregorianCalendar instance when
+      // using a non-Gregorian locale (e.g. fa_IR)! In that case, setGregorianChange will not exist.
+      if ($calendar instanceof IntlGregorianCalendar) {
+        $calendar->setGregorianChange(PHP_INT_MIN);
+      }
 
       return (new IntlDateFormatter($locale, $date_type, $time_type, $tz, $calendar, $pattern))->format($timestamp);
     };
@@ -138,7 +140,7 @@
       // Year
       '%C' => function ($timestamp) {
         // Century (-1): 19 for 20th century
-        return floor($timestamp->format('Y') / 100);
+        return sprintf('%02d', intdiv((int) $timestamp->format('Y'), 100));
       },
       '%g' => function ($timestamp) {
         return substr($timestamp->format('o'), -2);
@@ -171,20 +173,24 @@
 
       // Time and Date Stamps
       '%c' => $intl_formatter,
-      '%D' => 'm/d/Y',
+      '%D' => 'm/d/y', // %m/%d/%y
       '%F' => 'Y-m-d',
       '%s' => 'U',
       '%x' => $intl_formatter,
     ];
 
-    $out = preg_replace_callback('/(?<!%)%([_#-]?)([a-zA-Z])/', function ($match) use ($translation_table, $timestamp) {
+    // %% is matched as its own token, so that "%%%Y" becomes "%" followed by the year
+    $out = preg_replace_callback('/%%|%([_#-]?)([a-zA-Z])/', function ($match) use ($translation_table, $timestamp) {
+      if ($match[0] == '%%') {
+        return '%';
+      }
+
       $prefix = $match[1];
       $char = $match[2];
       $pattern = '%'.$char;
       if ($pattern == '%n') {
         return "\n";
-      }
-      elseif ($pattern == '%t') {
+      } elseif ($pattern == '%t') {
         return "\t";
       }
 
@@ -196,8 +202,7 @@
 
       if (is_string($replace)) {
         $result = $timestamp->format($replace);
-      }
-      else {
+      } else {
         $result = $replace($timestamp, $pattern);
       }
 
@@ -208,12 +213,11 @@
         case '#':
         case '-':
           // remove leading zeros but keep last char if also zero
-          return preg_replace('/^0+(?=.)/', '', $result);
+          return preg_replace('/^[0\s]+(?=.)/', '', $result);
       }
 
       return $result;
     }, $format);
 
-    $out = str_replace('%%', '%', $out);
     return $out;
   }

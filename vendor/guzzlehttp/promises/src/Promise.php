@@ -1,63 +1,113 @@
 <?php
 
+declare(strict_types=1);
+
 namespace GuzzleHttp\Promise;
 
 /**
  * Promises/A+ implementation that avoids recursion when possible.
  *
- * @link https://promisesaplus.com/
+ * @template TValue = mixed
+ * @template TReason = mixed
+ *
+ * @implements PromiseInterface<TValue, TReason>
+ *
+ * @see https://promisesaplus.com/
+ *
+ * @final
  */
 class Promise implements PromiseInterface
 {
-    private $state = self::PENDING;
+    use NonSerializableTrait;
+
+    /** @var self::PENDING|self::FULFILLED|self::REJECTED */
+    private string $state = self::PENDING;
+
+    /** @var TValue|TReason|PromiseInterface<TValue, TReason>|null */
     private $result;
+
+    /** @var (callable(): void)|null */
     private $cancelFn;
+
+    /** @var (callable(bool): void)|null */
     private $waitFn;
-    private $waitList;
-    private $handlers = [];
+
+    /** @var list<Promise<mixed, mixed>>|null */
+    private ?array $waitList = null;
+
+    /** @var list<array{0: PromiseInterface<mixed, mixed>, 1: callable|null, 2: callable|null}>|null */
+    private ?array $handlersBefore = [];
+
+    /** @var list<array{0: PromiseInterface<mixed, mixed>, 1: callable|null, 2: callable|null}>|null */
+    private ?array $handlers = [];
 
     /**
-     * @param callable $waitFn   Fn that when invoked resolves the promise.
-     * @param callable $cancelFn Fn that when invoked cancels the promise.
+     * @param (callable(bool): void)|null $waitFn   Fn that when invoked resolves the promise.
+     * @param (callable(): void)|null     $cancelFn Fn that when invoked cancels the promise.
      */
     public function __construct(
-        callable $waitFn = null,
-        callable $cancelFn = null
+        ?callable $waitFn = null,
+        ?callable $cancelFn = null
     ) {
         $this->waitFn = $waitFn;
         $this->cancelFn = $cancelFn;
     }
 
+    /**
+     * @template TFulfilledValue = never
+     * @template TFulfilledReason = never
+     * @template TRejectedValue = never
+     * @template TRejectedReason = never
+     *
+     * @param (callable(TValue): (TFulfilledValue|PromiseInterface<TFulfilledValue, TFulfilledReason>))|null $onFulfilled Invoked when the promise fulfills.
+     * @param (callable(TReason): (TRejectedValue|PromiseInterface<TRejectedValue, TRejectedReason>))|null   $onRejected  Invoked when the promise is rejected.
+     *
+     * @return PromiseInterface<($onFulfilled is null ? TValue : TFulfilledValue)|($onRejected is null ? never : TRejectedValue), ($onFulfilled is null ? never : TFulfilledReason|\Throwable)|($onRejected is null ? TReason : TRejectedReason|\Throwable)>
+     */
     public function then(
-        callable $onFulfilled = null,
-        callable $onRejected = null
-    ) {
+        ?callable $onFulfilled = null,
+        ?callable $onRejected = null
+    ): PromiseInterface {
         if ($this->state === self::PENDING) {
             $p = new Promise(null, [$this, 'cancel']);
             $this->handlers[] = [$p, $onFulfilled, $onRejected];
             $p->waitList = $this->waitList;
             $p->waitList[] = $this;
+
             return $p;
         }
 
         // Return a fulfilled promise and immediately invoke any callbacks.
         if ($this->state === self::FULFILLED) {
             $promise = Create::promiseFor($this->result);
-            return $onFulfilled ? $promise->then($onFulfilled) : $promise;
+
+            return $promise->then($onFulfilled, $onRejected);
         }
 
         // It's either cancelled or rejected, so return a rejected promise
         // and immediately invoke any callbacks.
         $rejection = Create::rejectionFor($this->result);
-        return $onRejected ? $rejection->then(null, $onRejected) : $rejection;
+
+        /** @var PromiseInterface<($onFulfilled is null ? TValue : TFulfilledValue)|($onRejected is null ? never : TRejectedValue), ($onFulfilled is null ? never : TFulfilledReason|\Throwable)|($onRejected is null ? TReason : TRejectedReason|\Throwable)> $promise */
+        $promise = $onRejected ? $rejection->then(null, $onRejected) : $rejection;
+
+        return $promise;
     }
 
-    public function otherwise(callable $onRejected)
+    /**
+     * @template TRejectedValue = never
+     * @template TRejectedReason = never
+     *
+     * @param callable(TReason): (TRejectedValue|PromiseInterface<TRejectedValue, TRejectedReason>) $onRejected Invoked when the promise is rejected.
+     *
+     * @return PromiseInterface<TValue|TRejectedValue, TRejectedReason|\Throwable>
+     */
+    public function otherwise(callable $onRejected): PromiseInterface
     {
         return $this->then(null, $onRejected);
     }
 
-    public function wait($unwrap = true)
+    public function wait(bool $unwrap = true)
     {
         $this->waitIfPending();
 
@@ -71,14 +121,16 @@ class Promise implements PromiseInterface
             // It's rejected so "unwrap" and throw an exception.
             throw Create::exceptionFor($this->result);
         }
+
+        return null;
     }
 
-    public function getState()
+    public function getState(): string
     {
         return $this->state;
     }
 
-    public function cancel()
+    public function cancel(): void
     {
         if ($this->state !== self::PENDING) {
             return;
@@ -93,8 +145,6 @@ class Promise implements PromiseInterface
                 $fn();
             } catch (\Throwable $e) {
                 $this->reject($e);
-            } catch (\Exception $e) {
-                $this->reject($e);
             }
         }
 
@@ -105,17 +155,17 @@ class Promise implements PromiseInterface
         }
     }
 
-    public function resolve($value)
+    public function resolve($value = null): void
     {
         $this->settle(self::FULFILLED, $value);
     }
 
-    public function reject($reason)
+    public function reject($reason): void
     {
         $this->settle(self::REJECTED, $reason);
     }
 
-    private function settle($state, $value)
+    private function settle(string $state, $value): void
     {
         if ($this->state !== self::PENDING) {
             // Ignore calls with the same resolution.
@@ -135,7 +185,8 @@ class Promise implements PromiseInterface
         $this->state = $state;
         $this->result = $value;
         $handlers = $this->handlers;
-        $this->handlers = null;
+        $before = $this->handlersBefore;
+        $this->handlers = $this->handlersBefore = null;
         $this->waitList = $this->waitFn = null;
         $this->cancelFn = null;
 
@@ -143,33 +194,61 @@ class Promise implements PromiseInterface
             return;
         }
 
+        if ($value instanceof Promise && State::isPending($value)) {
+            // We can just hand our handlers to the next promise. Merging would
+            // copy both lists every time, so only the shorter one is moved.
+            if ($value->handlers === []) {
+                $value->handlers = $handlers;
+                $value->handlersBefore = $before;
+            } elseif (count($value->handlers) + count($value->handlersBefore) < count($handlers) + count($before)) {
+                array_push($before, ...array_reverse($value->handlers), ...$value->handlersBefore);
+                $value->handlers = $handlers;
+                $value->handlersBefore = $before;
+            } else {
+                array_push($value->handlers, ...array_reverse($before), ...$handlers);
+            }
+
+            return;
+        }
+
+        if ($before) {
+            $handlers = array_merge(array_reverse($before), $handlers);
+        }
+
         // If the value was not a settled promise or a thenable, then resolve
         // it in the task queue using the correct ID.
         if (!is_object($value) || !method_exists($value, 'then')) {
             $id = $state === self::FULFILLED ? 1 : 2;
             // It's a success, so resolve the handlers in the queue.
-            Utils::queue()->add(static function () use ($id, $value, $handlers) {
+            Utils::queue()->add(static function () use ($id, $value, $handlers): void {
                 foreach ($handlers as $handler) {
                     self::callHandler($id, $value, $handler);
                 }
             });
-        } elseif ($value instanceof Promise && Is::pending($value)) {
-            // We can just merge our handlers onto the next promise.
-            $value->handlers = array_merge($value->handlers, $handlers);
         } else {
             // Resolve the handlers when the forwarded promise is resolved.
-            $value->then(
-                static function ($value) use ($handlers) {
-                    foreach ($handlers as $handler) {
-                        self::callHandler(1, $value, $handler);
+            try {
+                $value->then(
+                    static function ($value) use (&$handlers): void {
+                        foreach ($handlers as $handler) {
+                            self::callHandler(1, $value, $handler);
+                        }
+                    },
+                    static function ($reason) use (&$handlers): void {
+                        foreach ($handlers as $handler) {
+                            self::callHandler(2, $reason, $handler);
+                        }
                     }
-                },
-                static function ($reason) use ($handlers) {
+                );
+            } catch (\Throwable $e) {
+                Utils::queue()->add(static function () use ($e, $handlers): void {
                     foreach ($handlers as $handler) {
-                        self::callHandler(2, $reason, $handler);
+                        self::callHandler(2, $e, $handler);
                     }
-                }
-            );
+                });
+                // The thenable may still hold the callbacks.
+                $handlers = [];
+            }
         }
     }
 
@@ -180,14 +259,14 @@ class Promise implements PromiseInterface
      * @param mixed $value   Value to pass to the callback.
      * @param array $handler Array of handler data (promise and callbacks).
      */
-    private static function callHandler($index, $value, array $handler)
+    private static function callHandler(int $index, $value, array $handler): void
     {
-        /** @var PromiseInterface $promise */
+        /** @var PromiseInterface<mixed, mixed> $promise */
         $promise = $handler[0];
 
         // The promise may have been cancelled or resolved before placing
         // this thunk in the queue.
-        if (Is::settled($promise)) {
+        if (State::isSettled($promise)) {
             return;
         }
 
@@ -210,13 +289,14 @@ class Promise implements PromiseInterface
                 $promise->reject($value);
             }
         } catch (\Throwable $reason) {
-            $promise->reject($reason);
-        } catch (\Exception $reason) {
-            $promise->reject($reason);
+            // The handler may have settled the promise itself.
+            if (State::isPending($promise)) {
+                $promise->reject($reason);
+            }
         }
     }
 
-    private function waitIfPending()
+    private function waitIfPending(): void
     {
         if ($this->state !== self::PENDING) {
             return;
@@ -227,9 +307,9 @@ class Promise implements PromiseInterface
         } else {
             // If there's no wait function, then reject the promise.
             $this->reject('Cannot wait on a promise that has '
-                . 'no internal wait function. You must provide a wait '
-                . 'function when constructing the promise to be able to '
-                . 'wait on a promise.');
+                .'no internal wait function. You must provide a wait '
+                .'function when constructing the promise to be able to '
+                .'wait on a promise.');
         }
 
         Utils::queue()->run();
@@ -240,13 +320,13 @@ class Promise implements PromiseInterface
         }
     }
 
-    private function invokeWaitFn()
+    private function invokeWaitFn(): void
     {
         try {
             $wfn = $this->waitFn;
             $this->waitFn = null;
             $wfn(true);
-        } catch (\Exception $reason) {
+        } catch (\Throwable $reason) {
             if ($this->state === self::PENDING) {
                 // The promise has not been resolved yet, so reject the promise
                 // with the exception.
@@ -259,7 +339,7 @@ class Promise implements PromiseInterface
         }
     }
 
-    private function invokeWaitList()
+    private function invokeWaitList(): void
     {
         $waitList = $this->waitList;
         $this->waitList = null;

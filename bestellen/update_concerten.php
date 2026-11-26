@@ -1,149 +1,152 @@
 <?php
 // stel php in dat deze fouten weergeeft
 //ini_set('display_errors', 1);
-error_reporting(E_ALL);
+error_reporting( E_ALL );
 
 require_once('modules/bestelfuncties.php');
-
-$_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php';
-use function PHP81_BC\strftime;
-
 require_once($_SERVER["DOCUMENT_ROOT"].'/vendor/autoload.php');
+use function php81_bc\strftime;
 
-Kint::$enabled_mode = false; // ($_SERVER['REMOTE_ADDR'] === '83.87.12.163');
+Kint::$enabled_mode = false;
 
-ob_start();
 session_start();
+if ( !isset( $_SESSION[ 'zoeknaam' ] ) ) $_SESSION[ 'zoeknaam' ] = '';
+if ( isset( $_POST[ 'zoeknaam' ] ) ) $_SESSION[ 'zoeknaam' ] = trim( $_POST[ 'zoeknaam' ] );
+if ( isset( $_POST[ 'wis' ] )AND $_POST[ 'wis' ] == 'wis' ) $_SESSION[ 'zoeknaam' ] = '';
+$toon_navigatie = isset( $_POST[ 'zoek' ] ) || isset( $_POST[ 'zoeknaam' ] );
 
-if (isset($_POST['zoeknaam'])AND $_POST['zoeknaam'] != '')$_SESSION['zoeknaam'] = $_POST['zoeknaam'];
-if (isset($_POST['wis'])AND $_POST['wis'] == 'wis')unset($_SESSION['zoeknaam']);
+d( $_REQUEST, $_SESSION );
 
-d($_REQUEST, $_SESSION);
+$zoekterm = quote( '%' . $_SESSION[ 'zoeknaam' ] . '%' );
+$concerten = select_query( "SELECT * FROM {$tabel_concerten} WHERE datum LIKE {$zoekterm} OR concerttitel LIKE {$zoekterm} OR plaats LIKE {$zoekterm} ORDER BY datum ASC" );
+d($concerten);
 
-$concerten = select_query("SELECT * FROM {$tabel_concerten} WHERE datum LIKE '%%{$_SESSION['zoeknaam']}%%' OR concerttitel LIKE '%%{$_SESSION['zoeknaam']}%%' OR plaats LIKE '%%{$_SESSION['zoeknaam']}%%' ORDER BY datum ASC");
-
-if ((isset($_POST["Toevoegen"])) && ($_POST["Toevoegen"] == "Toevoegen")) {
-	$insertSQL = sprintf("INSERT INTO {$tabel_concerten} (concerttitel, details, opmerking_intern, datum, tijd, plaats, prijs_vol,
+if ( ( isset( $_POST[ "Toevoegen" ] ) ) && ( $_POST[ "Toevoegen" ] == "Toevoegen" ) ) {
+	$insertSQL = sprintf( "INSERT INTO {$tabel_concerten} (concerttitel, details, opmerking_intern, datum, tijd, plaats, prijs_vol,
   prijs_red, prijs_kind, txt_red, txt_kind, online, aantal_plaatsen, uitverkocht) VALUES (%s, %s, %s, %s, %s, %s, %F, %F, %F, %s, %s, %s, %s, %s)",
-		quote($_POST['concerttitel'], "text"),
-		quote($_POST['details'], "text"),
-		quote($_POST['opmerking_intern'], "text"),
-		quote($_POST['datum'], "date"),
-		quote($_POST['tijd'], "time"),
-		quote($_POST['plaats'], "text"),
-		round($_POST['prijs_vol'], 2),
-		round($_POST['prijs_red'], 2),
-		round($_POST['prijs_kind'], 2),
-		quote($_POST['txt_red'], "text"),
-		quote($_POST['txt_kind'], "text"),
-		quote($_POST['online'], "int"),
-		quote($_POST['aantal_plaatsen'], "int"),
-		quote($_POST['uitverkocht'], "int"));
+		quote( $_POST[ 'concerttitel' ], "text" ),
+		quote( $_POST[ 'details' ], "text" ),
+		quote( $_POST[ 'opmerking_intern' ], "text" ),
+		quote( $_POST[ 'datum' ], "date" ),
+		quote( $_POST[ 'tijd' ], "date" ),
+		quote( $_POST[ 'plaats' ], "text" ),
+		$_POST[ 'prijs_vol' ],
+		$_POST[ 'prijs_red' ],
+		$_POST[ 'prijs_kind' ],
+		quote( $_POST[ 'txt_red' ], "text" ),
+		quote( $_POST[ 'txt_kind' ], "text" ),
+		quote( $_POST[ 'online' ], "int" ),
+		quote( $_POST[ 'aantal_plaatsen' ], "int" ),
+		quote( $_POST[ 'uitverkocht' ], "int" ) );
 
-	d($insertSQL);
+	d( $insertSQL );
 
-	exec_query($insertSQL);
+	exec_query( $insertSQL );
 	// echo ('concert is toegevoegd');
 }
 
-if ((isset($_POST["Wijzigen"])) && ($_POST["Wijzigen"] == "Wijzigen")) {
-	$updateSQL = sprintf("UPDATE {$tabel_concerten} SET concerttitel=%s, details=%s, opmerking_intern=%s, datum=%s, tijd=%s, plaats=%s, 
+if ( ( isset( $_POST[ "Wijzigen" ] ) ) && ( $_POST[ "Wijzigen" ] == "Wijzigen" ) ) {
+	$updateSQL = sprintf( "UPDATE {$tabel_concerten} SET concerttitel=%s, details=%s, opmerking_intern=%s, datum=%s, tijd=%s, plaats=%s, 
   prijs_vol=%F, prijs_red=%F, prijs_kind=%F, txt_red=%s, txt_kind=%s, online=%s, aantal_plaatsen=%s, uitverkocht=%s WHERE concertId=%s",
-		quote($_POST['concerttitel'], "text"),
-		quote($_POST['details'], "text"),
-		quote($_POST['opmerking_intern'], "text"),
-		quote($_POST['datum'], "date"),
-		quote($_POST['tijd'], "time"),
-		quote($_POST['plaats'], "text"),
-		round($_POST['prijs_vol'], 2),
-		round($_POST['prijs_red'], 2),
-		round($_POST['prijs_kind'], 2),
-		quote($_POST['txt_red'], "text"),
-		quote($_POST['txt_kind'], "text"),
-		quote($_POST['online'], "int"),
-		quote($_POST['aantal_plaatsen'], "int"),
-		quote($_POST['uitverkocht'], "int"),
-		quote($_POST['concertId'], "int"));
+		quote( $_POST[ 'concerttitel' ], "text" ),
+		quote( $_POST[ 'details' ], "text" ),
+		quote( $_POST[ 'opmerking_intern' ], "text" ),
+		quote( $_POST[ 'datum' ], "date" ),
+		quote( $_POST[ 'tijd' ], "date" ),
+		quote( $_POST[ 'plaats' ], "text" ),
+		round( $_POST[ 'prijs_vol' ], 2 ),
+		round( $_POST[ 'prijs_red' ], 2 ),
+		round( $_POST[ 'prijs_kind' ], 2 ),
+		quote( $_POST[ 'txt_red' ], "text" ),
+		quote( $_POST[ 'txt_kind' ], "text" ),
+		quote( $_POST[ 'online' ], "int" ),
+		quote( $_POST[ 'aantal_plaatsen' ], "int" ),
+		quote( $_POST[ 'uitverkocht' ], "int" ),
+		quote( $_POST[ 'concertId' ], "int" ) );
 
-	d($updateSQL);
+	d( $updateSQL );
 
-	exec_query($updateSQL);
+	exec_query( $updateSQL );
+	// echo ('concert is gewijzigd');
 }
 
-if ((isset($_POST["Wissen"])) && ($_POST["Wissen"] == "Wissen")and(isset($_POST['concertId']))and($_POST['concertId'] != "")) {
-	$deleteSQL = sprintf("DELETE FROM {$tabel_concerten} WHERE concertId=%s",
-		quote($_POST['concertId'], "int"));
+if ( ( isset( $_POST[ "Wissen" ] ) ) && ( $_POST[ "Wissen" ] == "Wissen" )and( isset( $_POST[ 'concertId' ] ) )and( $_POST[ 'concertId' ] != "" ) ) {
+	$deleteSQL = sprintf( "DELETE FROM {$tabel_concerten} WHERE concertId=%s",
+		quote( $_POST[ 'concertId' ], "int" ) );
 
-	exec_query($deleteSQL);
+	exec_query( $deleteSQL );
+	// echo ('concert is gewist');
 }
 
+// begin Recordset
 $concertId = "-1";
-if (isset($_GET['concertId'])) {
-	if (!isset($_POST["leegmaken"]))$concertId = $_GET['concertId'];
-	$concert = select_query("SELECT * FROM {$tabel_concerten} WHERE concertId = {$concertId}", 1);
+if ( isset( $_GET[ 'concertId' ] ) ) {
+	if ( !isset( $_POST[ "leegmaken" ] ) )$concertId = $_GET[ 'concertId' ];
+	$concert = select_query( "SELECT * FROM {$tabel_concerten} WHERE concertId = {$concertId}", 1 );
 }
 
-d($concerten);
-?> 
+d( $concert );
+// end Recordset
 
+?>
 <!DOCTYPE HTML>
 <html>
 <head>
-	<title>Concertonderhoud <?php echo($organisator); ?></title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta charset="utf-8">
+	<title>Concertonderhoud <?php echo($organisator); ?></title>
 	<link href="<?php echo $css; ?>" rel="stylesheet" type="text/css">
 	<link href="<?php echo $bestellijst_css; ?>" rel="stylesheet" type="text/css">
-    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+	<link rel="icon" type="image/png" href=<?php echo $favicon; ?>>
 	<script>
 		function w3_open() {
-			document.getElementById("main").style.marginLeft = "260px";
-			document.getElementById("navcontainer").style.width = "250px";
-			document.getElementById("navcontainer").style.display = "block";
-			document.getElementById("openNav").style.display = "none";
+			document.getElementById( "main" ).style.marginLeft = "260px";
+			document.getElementById( "nav" ).style.display = "block";
+			document.getElementById( "navcontainer" ).style.width = "250px";
+			document.getElementById( "navcontainer" ).style.display = "block";
+			document.getElementById( "openNav" ).style.display = "none";
 		}
 
 		function w3_close() {
-			document.getElementById("main").style.marginLeft = "0%";
-			document.getElementById("navcontainer").style.display = "none";
-			document.getElementById("openNav").style.display = "inline-block";
+			document.getElementById( "main" ).style.marginLeft = "0%";
+			document.getElementById( "nav" ).style.display = "none";
+			document.getElementById( "navcontainer" ).style.display = "none";
+			document.getElementById( "openNav" ).style.display = "inline-block";
 		}
 	</script>
 </head>
 
-<body>
-   <div id="nav" class="w3-sidebar w3-bar-block w3-collapse w3-card w3-animate-left">
+<body> 
+	<button id="openNav" class="w3-button w3-xlarge w3-hide-large" onclick="w3_open()" type="button">&#9776; Concerten</button>
+	<div id="nav" class="w3-sidebar w3-bar-block w3-collapse w3-card w3-animate-left"<?php echo $toon_navigatie ? ' style="display:block"' : ''; ?>>
 		<form id="vinden" method="post" action="<?php echo $editFormAction; ?>">
 			<div class="w3-panel">
 				<label>Zoekterm: <br><input name="zoeknaam" type="text" id="zoeknaam" value="<?php echo $_SESSION['zoeknaam']; ?>" size="5"></label>
 				<input name="zoek" type="submit" id="zoek" value="zoek">
 				<input name="wis" type="submit" id="wis" value="wis">
-				<?php  if (isset($concerten) AND is_array($concerten)) $aantal_concerten = count($concerten); else $aantal_concerten = 0;
-				if ($aantal_concerten > 0) { 
-					echo <<<XXX
-					<p>$aantal_concerten resultaten. Klik een item aan:</p>
-					</div>
-						<div id="navcontainer">
-							<ul id="navlist">
-								<li><a href="#" onclick="w3_close()" class="w3-closenav w3-large w3-hide-large">Close &times;</a></li>
-					XXX;		
-					foreach($concerten AS $conc) {
-						$datum = strftime("%a %e %B %Y", strtotime($conc['datum'])); 
-						$c = $conc['concerttitel'];
-						$href = $_SERVER['PHP_SELF'].'?concertId='.$conc['concertId'];
-						echo <<<XXX
-						<li id="active">
-							<a href="$href">$c<br><span class='klein'>($datum)</span></a></li>
-						XXX;
-					}
-					?>
-					</ul>
-				<?php } ?>	
 			</div>
+				<?php  if (isset($concerten) AND is_array($concerten)) $aantal_concerten = count($concerten); else $aantal_concerten = 0;
+					if ($aantal_concerten > 0) { 
+						echo '<p>' . $aantal_concerten . ' resultaten. Klik een item aan:</p>';
+					?>
+					<div id="navcontainer">
+						<ul id="navlist">
+							<?php foreach (array_values($concerten) as $conc) {
+								$datum = date('d-m-Y', strtotime($conc['datum']));
+								$titel = htmlspecialchars($conc['concerttitel'], ENT_QUOTES, 'UTF-8');
+								$href = htmlspecialchars($_SERVER['PHP_SELF'] . '?concertId=' . (int) $conc['concertId'], ENT_QUOTES, 'UTF-8');
+							?>
+							<li><a href="<?php echo $href; ?>"><?php echo $titel; ?><br><span class="klein"><?php echo htmlspecialchars('(' . $datum . ')', ENT_QUOTES, 'UTF-8'); ?></span></a></li>
+							<?php } ?>
+						</ul>
+					</div>
+					<?php
+								}
+					?>
 		</form>
 	</div>
 
-	<div id="main" class="w3-main w3-white w3-container w3-padding">
+	<div id="main" class="w3-main w3-container w3-padding">
 		<form name="concert" method="POST" id="concert" action="<?php echo $editFormAction; ?>">
 			<table width="100%" align="left">
 				<tr valign="baseline">
@@ -162,7 +165,7 @@ d($concerten);
 					<td><input type="text" name="concerttitel" value="<?php echo htmlspecialchars($concert['concerttitel']); ?>" size="32"/>
 					</td>
 					<td width="3%" align="right" nowrap="nowrap">Online:
-						<input type="checkbox" name="online" value="1" <?php if ($concert['online']==1) echo 'checked'; ?> /></td>
+						<input type="checkbox" name="online" value="1" <?php if ($concert[ 'online']==1 ) echo 'checked'; ?> /></td>
 					<td width="100" align="right" nowrap>Prijs red.:</td>
 					<td width="70%"><input type="text" name="prijs_red" value="<?php echo $concert['prijs_red']; ?>" size="10"/> ; korting voor
 						<input type="text" name="txt_red" value="<?php echo $concert['txt_red']; ?>" size="40"/>
@@ -191,7 +194,7 @@ d($concerten);
 					<td width="300" colspan="2"><input type="text" name="plaats" value="<?php echo $concert['plaats']; ?>" size="40"/>
 					</td>
 					<td width="100" align="right" nowrap>Uitverkocht:</td>
-					<td width="70%"><input name="uitverkocht" type="checkbox" id="uitverkocht" value="1" <?php if ($concert['uitverkocht']==1) echo 'checked'; ?>></td>
+					<td width="70%"><input name="uitverkocht" type="checkbox" id="uitverkocht" value="1" <?php if ($concert[ 'uitverkocht']==1 ) echo 'checked'; ?>></td>
 				</tr>
 				<tr valign="baseline">
 					<td width="10%" align="right" valign="top" nowrap>Publieke details:</td>
@@ -214,6 +217,5 @@ d($concerten);
 			</table>
 		</form>
 	</div>
-<?php ob_end_flush(); ?>
-	</body>
+</body>
 </html>

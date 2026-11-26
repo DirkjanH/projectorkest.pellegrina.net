@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace GuzzleHttp\Promise;
 
 /**
@@ -10,16 +12,23 @@ namespace GuzzleHttp\Promise;
  * by calling the `run()` function of the global task queue in an event loop.
  *
  *     GuzzleHttp\Promise\Utils::queue()->run();
+ *
+ * @final
  */
 class TaskQueue implements TaskQueueInterface
 {
-    private $enableShutdown = true;
-    private $queue = [];
+    use NonSerializableTrait;
 
-    public function __construct($withShutdown = true)
+    private bool $enableShutdown = true;
+    /** @var \SplQueue<callable(): void> */
+    private \SplQueue $queue;
+
+    public function __construct(bool $withShutdown = true)
     {
+        $this->queue = new \SplQueue();
+
         if ($withShutdown) {
-            register_shutdown_function(function () {
+            register_shutdown_function(function (): void {
                 if ($this->enableShutdown) {
                     // Only run the tasks if an E_ERROR didn't occur.
                     $err = error_get_last();
@@ -31,20 +40,28 @@ class TaskQueue implements TaskQueueInterface
         }
     }
 
-    public function isEmpty()
+    public function __clone()
     {
-        return !$this->queue;
+        $this->queue = clone $this->queue;
     }
 
-    public function add(callable $task)
+    public function isEmpty(): bool
     {
-        $this->queue[] = $task;
+        return $this->queue->isEmpty();
     }
 
-    public function run()
+    /**
+     * @param callable(): void $task
+     */
+    public function add(callable $task): void
     {
-        while ($task = array_shift($this->queue)) {
-            /** @var callable $task */
+        $this->queue->enqueue($task);
+    }
+
+    public function run(): void
+    {
+        while (!$this->queue->isEmpty()) {
+            $task = $this->queue->dequeue();
             $task();
         }
     }
@@ -60,7 +77,7 @@ class TaskQueue implements TaskQueueInterface
      *
      * Note: This shutdown will occur before any destructors are triggered.
      */
-    public function disableShutdown()
+    public function disableShutdown(): void
     {
         $this->enableShutdown = false;
     }

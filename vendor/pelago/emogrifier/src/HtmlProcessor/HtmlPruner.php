@@ -6,19 +6,18 @@ namespace Pelago\Emogrifier\HtmlProcessor;
 
 use Pelago\Emogrifier\CssInliner;
 use Pelago\Emogrifier\Utilities\ArrayIntersector;
+use Pelago\Emogrifier\Utilities\Preg;
 
 /**
  * This class can remove things from HTML.
  */
-class HtmlPruner extends AbstractHtmlProcessor
+final class HtmlPruner extends AbstractHtmlProcessor
 {
     /**
      * We need to look for display:none, but we need to do a case-insensitive search. Since DOMDocument only
      * supports XPath 1.0, lower-case() isn't available to us. We've thus far only set attributes to lowercase,
      * not attribute values. Consequently, we need to translate() the letters that would be in 'NONE' ("NOE")
      * to lowercase.
-     *
-     * @var string
      */
     private const DISPLAY_NONE_MATCHER
         = '//*[@style and contains(translate(translate(@style," ",""),"NOE","noe"),"display:none")'
@@ -31,14 +30,16 @@ class HtmlPruner extends AbstractHtmlProcessor
      */
     public function removeElementsWithDisplayNone(): self
     {
-        $elementsWithStyleDisplayNone = $this->getXPath()->query(self::DISPLAY_NONE_MATCHER);
+        $elementsWithStyleDisplayNone = $this->xPath->query(self::DISPLAY_NONE_MATCHER);
+        \assert($elementsWithStyleDisplayNone instanceof \DOMNodeList);
         if ($elementsWithStyleDisplayNone->length === 0) {
             return $this;
         }
 
         foreach ($elementsWithStyleDisplayNone as $element) {
+            \assert($element instanceof \DOMElement);
             $parentNode = $element->parentNode;
-            if ($parentNode !== null) {
+            if ($parentNode instanceof \DOMElement) {
                 $parentNode->removeChild($element);
             }
         }
@@ -61,7 +62,8 @@ class HtmlPruner extends AbstractHtmlProcessor
      */
     public function removeRedundantClasses(array $classesToKeep = []): self
     {
-        $elementsWithClassAttribute = $this->getXPath()->query('//*[@class]');
+        /** @var \DOMNodeList<\DOMElement> $elementsWithClassAttribute */
+        $elementsWithClassAttribute = $this->xPath->query('//*[@class]');
 
         if ($classesToKeep !== []) {
             $this->removeClassesFromElements($elementsWithClassAttribute, $classesToKeep);
@@ -77,16 +79,17 @@ class HtmlPruner extends AbstractHtmlProcessor
      * Removes classes from the `class` attribute of each element in `$elements`, except any in `$classesToKeep`,
      * removing the `class` attribute itself if the resultant list is empty.
      *
-     * @param \DOMNodeList $elements
+     * @param \DOMNodeList<\DOMElement> $elements
      * @param array<array-key, string> $classesToKeep
      */
     private function removeClassesFromElements(\DOMNodeList $elements, array $classesToKeep): void
     {
         $classesToKeepIntersector = new ArrayIntersector($classesToKeep);
 
-        /** @var \DOMElement $element */
+        $preg = new Preg();
         foreach ($elements as $element) {
-            $elementClasses = \preg_split('/\\s++/', \trim($element->getAttribute('class')));
+            /** @var list<string> $elementClasses */
+            $elementClasses = $preg->split('/\\s++/', \trim($element->getAttribute('class')));
             $elementClassesToKeep = $classesToKeepIntersector->intersectWith($elementClasses);
             if ($elementClassesToKeep !== []) {
                 $element->setAttribute('class', \implode(' ', $elementClassesToKeep));
@@ -97,13 +100,10 @@ class HtmlPruner extends AbstractHtmlProcessor
     }
 
     /**
-     * Removes the `class` attribute from each element in `$elements`.
-     *
-     * @param \DOMNodeList $elements
+     * @param \DOMNodeList<\DOMElement> $elements
      */
     private function removeClassAttributeFromElements(\DOMNodeList $elements): void
     {
-        /** @var \DOMElement $element */
         foreach ($elements as $element) {
             $element->removeAttribute('class');
         }
@@ -125,8 +125,12 @@ class HtmlPruner extends AbstractHtmlProcessor
     public function removeRedundantClassesAfterCssInlined(CssInliner $cssInliner): self
     {
         $classesToKeepAsKeys = [];
+
+        $preg = new Preg();
         foreach ($cssInliner->getMatchingUninlinableSelectors() as $selector) {
-            \preg_match_all('/\\.(-?+[_a-zA-Z][\\w\\-]*+)/', $selector, $matches);
+            $matches = null;
+            $preg->matchAll('/\\.(-?+[_a-zA-Z][\\w\\-]*+)/', $selector, $matches);
+            \assert(isset($matches[1]));
             $classesToKeepAsKeys += \array_fill_keys($matches[1], true);
         }
 
