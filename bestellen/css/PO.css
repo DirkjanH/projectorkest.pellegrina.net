@@ -150,7 +150,6 @@ th {
   padding: 3px;
   width: 220px;
   border-bottom: 1px solid #0066ff;
-  font-weight: bold;
   text-decoration: none;
 }
 
@@ -163,6 +162,7 @@ th {
 }
 
 #navcontainer li {
+  font-size: 12px;
   padding-bottom: 0px;
   padding-top: 0px;
   margin-top: 3px;
