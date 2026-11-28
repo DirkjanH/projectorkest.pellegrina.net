@@ -137,7 +137,7 @@ th {
 }
 
 #res th {
-  background: #00ff99;
+  background: #c10261;
 }
 
 #nav {
@@ -153,16 +153,13 @@ th {
   text-decoration: none;
 }
 
-#navcontainer ul {
+#navcontainer ul,
+#navcontainer p {
   margin-left: 20px;
   padding-left: 0px;
   list-style-type: none;
   font-family: Verdana, Arial, Helvetica, sans-serif;
   font-size: 15px;
-}
-
-#navcontainer p {
-  margin-left: 20px;
 }
 
 #navcontainer li {
