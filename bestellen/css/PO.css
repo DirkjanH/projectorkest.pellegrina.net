@@ -161,6 +161,10 @@ th {
   font-size: 15px;
 }
 
+#navcontainer p {
+  margin-left: 20px;
+}
+
 #navcontainer li {
   padding-bottom: 0px;
   padding-top: 0px;
